@@ -1,9 +1,10 @@
 package divan.springframework.divanarticlewebapp.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class Employee {
         @Id
@@ -14,6 +15,16 @@ public class Employee {
         private String position;
         private String province;
         private String serviceUnit;
+        @OneToMany(mappedBy = "employee")
+        private Set<Article> articles = new HashSet<>();
+
+        public Set<Article> getArticles() {
+            return articles;
+        }
+
+        public void setArticles(Set<Article> articles) {
+            this.articles = articles;
+        }
 
         public Long getId() {
             return id;
@@ -63,17 +74,29 @@ public class Employee {
             this.serviceUnit = serviceUnit;
         }
 
+        @Override
+        public String toString() {
+            return "Employee{" +
+                    "id=" + id +
+                    ", firstName='" + firstName + '\'' +
+                    ", lastName='" + lastName + '\'' +
+                    ", position='" + position + '\'' +
+                    ", province='" + province + '\'' +
+                    ", serviceUnit='" + serviceUnit + '\'' +
+                    ", articles=" + articles +
+                    '}';
+        }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Employee employee)) return false;
+        @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (!(o instanceof Employee employee)) return false;
 
-        return getId() != null ? getId().equals(employee.getId()) : employee.getId() == null;
+                return getId() != null ? getId().equals(employee.getId()) : employee.getId() == null;
+            }
+
+            @Override
+            public int hashCode() {
+                return getId() != null ? getId().hashCode() : 0;
+            }
     }
-
-    @Override
-    public int hashCode() {
-        return getId() != null ? getId().hashCode() : 0;
-    }
-}
